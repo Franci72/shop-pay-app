@@ -6,12 +6,16 @@ let db;
 
 async function getDb() {
     if (!db) {
+        // Use /tmp for Railway (writable directory)
+        const dbPath = process.env.NODE_ENV === 'production' 
+            ? '/tmp/shop_pay.db' 
+            : path.join(__dirname, '../../shop_pay.db');
+
         db = await open({
-            filename: path.join(__dirname, '../../shop_pay.db'),
+            filename: dbPath,
             driver: sqlite3.Database
         });
 
-        // Users table
         await db.exec(`
             CREATE TABLE IF NOT EXISTS users (
                 id TEXT PRIMARY KEY,
@@ -24,7 +28,6 @@ async function getDb() {
             )
         `);
 
-        // Business Accounts table
         await db.exec(`
             CREATE TABLE IF NOT EXISTS business_accounts (
                 id TEXT PRIMARY KEY,
@@ -43,7 +46,6 @@ async function getDb() {
             )
         `);
 
-        // 🔥 NEW: Transactions table for payment logs
         await db.exec(`
             CREATE TABLE IF NOT EXISTS transactions (
                 id TEXT PRIMARY KEY,
