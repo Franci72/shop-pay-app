@@ -4,41 +4,43 @@ const crypto = require('crypto');
 
 class BusinessAccount {
     static async create({ user_id, account_type, account_number, consumer_key, consumer_secret, passkey, environment }) {
-        const db = await getDb();
+        const db = getDb();
         const id = crypto.randomUUID();
-
-        // Encrypt sensitive data
         const encryptedKey = encrypt(consumer_key);
         const encryptedSecret = encrypt(consumer_secret);
         const encryptedPasskey = passkey ? encrypt(passkey) : null;
 
-        await db.run(
+        await db.query(
             `INSERT INTO business_accounts 
              (id, user_id, account_type, account_number, consumer_key, consumer_secret, passkey, environment) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
             [id, user_id, account_type, account_number, encryptedKey, encryptedSecret, encryptedPasskey, environment || 'sandbox']
         );
 
-        return db.query('SELECT * FROM business_accounts WHERE id = ?', [id]);
+        const result = await db.query(
+            'SELECT id, account_type, account_number, environment, created_at FROM business_accounts WHERE id = $1',
+            [id]
+        );
+        return result.rows[0];
     }
 
     static async findByUser(user_id) {
-        const db = await getDb();
-        const accounts = await db.all(
-            'SELECT * FROM business_accounts WHERE user_id = ? ORDER BY created_at DESC',
+        const db = getDb();
+        const result = await db.query(
+            'SELECT * FROM business_accounts WHERE user_id = $1 ORDER BY created_at DESC',
             [user_id]
         );
-        return accounts;
+        return result.rows;
     }
 
     static async findById(id, user_id) {
-        const db = await getDb();
-        const account = await db.quer(
-            'SELECT * FROM business_accounts WHERE id = ? AND user_id = ?',
+        const db = getDb();
+        const result = await db.query(
+            'SELECT * FROM business_accounts WHERE id = $1 AND user_id = $2',
             [id, user_id]
         );
+        const account = result.rows[0];
         if (account) {
-            // Decrypt when returning
             account.consumer_key = decrypt(account.consumer_key);
             account.consumer_secret = decrypt(account.consumer_secret);
             if (account.passkey) {
@@ -49,12 +51,12 @@ class BusinessAccount {
     }
 
     static async delete(id, user_id) {
-        const db = await getDb();
-        const result = await db.run(
-            'DELETE FROM business_accounts WHERE id = ? AND user_id = ?',
+        const db = getDb();
+        const result = await db.query(
+            'DELETE FROM business_accounts WHERE id = $1 AND user_id = $2',
             [id, user_id]
         );
-        return result.changes > 0;
+        return result.rowCount > 0;
     }
 }
 
