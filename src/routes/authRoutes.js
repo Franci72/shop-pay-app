@@ -1,8 +1,9 @@
 const express = require('express');
-const { handleCallback } = require('../controllers/callbackController');
+const { register, login } = require('../controllers/authController');
 
 const router = express.Router();
 
-router.post('/payment/callback', handleCallback);
+router.post('/register', register);
+router.post('/login', login);   // ✅ NO authenticate here!
 
 module.exports = router;

@@ -10,6 +10,9 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.2",
+    "@capacitor/cli": "^8.4.2",
+    "@capacitor/core": "^8.4.2",
     "axios": "^1.6.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",

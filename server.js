@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { authenticate } = require('./src/middleware/auth'); // ✅ Add this line
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,17 +16,13 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-// Auth routes (public)
+// ✅ PUBLIC routes (no auth)
 app.use('/api/auth', require('./src/routes/authRoutes'));
-
-// Callback routes (public – for Safaricom)
 app.use('/api', require('./src/routes/callbackRoutes'));
 
-// Account routes (protected)
-app.use('/api', require('./src/routes/accountRoutes'));
-
-// Payment routes (protected)
-app.use('/api', require('./src/routes/paymentRoutes'));
+// ✅ PROTECTED routes (require auth)
+app.use('/api', authenticate, require('./src/routes/accountRoutes'));   // ✅ Added authenticate
+app.use('/api', authenticate, require('./src/routes/paymentRoutes'));   // ✅ Added authenticate
 
 app.listen(PORT, () => {
     console.log(`✅ Server running on http://localhost:${PORT}`);
