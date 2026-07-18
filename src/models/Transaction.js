@@ -14,7 +14,7 @@ class Transaction {
             [id, user_id, account_id, phone_number, amount, account_reference, now, now]
         );
 
-        return db.get('SELECT * FROM transactions WHERE id = ?', [id]);
+        return db.query('SELECT * FROM transactions WHERE id = ?', [id]);
     }
 
     static async updateByCheckoutRequestId(checkoutRequestId, data) {
@@ -41,12 +41,12 @@ class Transaction {
             values
         );
 
-        return db.get('SELECT * FROM transactions WHERE checkout_request_id = ?', [checkoutRequestId]);
+        return db.query('SELECT * FROM transactions WHERE checkout_request_id = ?', [checkoutRequestId]);
     }
 
     static async findByCheckoutRequestId(checkoutRequestId) {
         const db = await getDb();
-        return db.get('SELECT * FROM transactions WHERE checkout_request_id = ?', [checkoutRequestId]);
+        return db.query('SELECT * FROM transactions WHERE checkout_request_id = ?', [checkoutRequestId]);
     }
 }
 

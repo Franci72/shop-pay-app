@@ -4,22 +4,27 @@ const crypto = require('crypto');
 
 class User {
     static async findByEmail(email) {
-        const db = await getDb();
-        return db.get('SELECT * FROM users WHERE email = ?', [email]);
+        const db = getDb();
+        const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+        return result.rows[0] || null;
     }
 
     static async create({ business_name, email, password, phone }) {
-        const db = await getDb();
+        const db = getDb();
         const id = crypto.randomUUID();
         const password_hash = await bcrypt.hash(password, 10);
 
-        await db.run(
+        await db.query(
             `INSERT INTO users (id, business_name, email, password_hash, phone) 
-             VALUES (?, ?, ?, ?, ?)`,
+             VALUES ($1, $2, $3, $4, $5)`,
             [id, business_name, email, password_hash, phone]
         );
 
-        return db.get('SELECT id, business_name, email, phone, is_active, created_at FROM users WHERE id = ?', [id]);
+        const result = await db.query(
+            'SELECT id, business_name, email, phone, is_active, created_at FROM users WHERE id = $1',
+            [id]
+        );
+        return result.rows[0];
     }
 }
 

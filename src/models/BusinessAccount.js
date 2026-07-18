@@ -19,7 +19,7 @@ class BusinessAccount {
             [id, user_id, account_type, account_number, encryptedKey, encryptedSecret, encryptedPasskey, environment || 'sandbox']
         );
 
-        return db.get('SELECT * FROM business_accounts WHERE id = ?', [id]);
+        return db.query('SELECT * FROM business_accounts WHERE id = ?', [id]);
     }
 
     static async findByUser(user_id) {
@@ -33,7 +33,7 @@ class BusinessAccount {
 
     static async findById(id, user_id) {
         const db = await getDb();
-        const account = await db.get(
+        const account = await db.quer(
             'SELECT * FROM business_accounts WHERE id = ? AND user_id = ?',
             [id, user_id]
         );
