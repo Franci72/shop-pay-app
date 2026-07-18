@@ -1,37 +1,30 @@
-const { open } = require('sqlite');
-const sqlite3 = require('sqlite3');
-const path = require('path');
+const { Pool } = require('pg');
 
-let db;
+let pool;
 
-async function getDb() {
-    if (!db) {
-        // Use /tmp for Railway (writable directory)
-        const dbPath = process.env.NODE_ENV === 'production' 
-            ? '/tmp/shop_pay.db' 
-            : path.join(__dirname, '../../shop_pay.db');
-
-        db = await open({
-            filename: dbPath,
-            driver: sqlite3.Database
+function getDb() {
+    if (!pool) {
+        pool = new Pool({
+            connectionString: process.env.DATABASE_URL,
+            ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
         });
 
-        await db.exec(`
+        pool.query(`
             CREATE TABLE IF NOT EXISTS users (
-                id TEXT PRIMARY KEY,
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                 business_name TEXT NOT NULL,
                 email TEXT UNIQUE NOT NULL,
                 password_hash TEXT NOT NULL,
                 phone TEXT NOT NULL,
                 is_active INTEGER DEFAULT 1,
-                created_at TEXT DEFAULT (datetime('now'))
+                created_at TIMESTAMP DEFAULT NOW()
             )
-        `);
+        `).catch(err => console.error('Users table error:', err));
 
-        await db.exec(`
+        pool.query(`
             CREATE TABLE IF NOT EXISTS business_accounts (
-                id TEXT PRIMARY KEY,
-                user_id TEXT NOT NULL,
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 account_type TEXT NOT NULL,
                 account_number TEXT NOT NULL,
                 consumer_key TEXT NOT NULL,
@@ -39,18 +32,17 @@ async function getDb() {
                 passkey TEXT,
                 environment TEXT DEFAULT 'sandbox',
                 is_default INTEGER DEFAULT 0,
-                last_used_at TEXT,
-                created_at TEXT DEFAULT (datetime('now')),
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                last_used_at TIMESTAMP,
+                created_at TIMESTAMP DEFAULT NOW(),
                 UNIQUE(user_id, account_number, account_type)
             )
-        `);
+        `).catch(err => console.error('Business accounts table error:', err));
 
-        await db.exec(`
+        pool.query(`
             CREATE TABLE IF NOT EXISTS transactions (
-                id TEXT PRIMARY KEY,
-                user_id TEXT NOT NULL,
-                account_id TEXT NOT NULL,
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                account_id UUID NOT NULL REFERENCES business_accounts(id) ON DELETE CASCADE,
                 phone_number TEXT NOT NULL,
                 amount INTEGER NOT NULL,
                 account_reference TEXT NOT NULL,
@@ -60,16 +52,14 @@ async function getDb() {
                 result_code INTEGER,
                 result_description TEXT,
                 status TEXT DEFAULT 'pending',
-                created_at TEXT DEFAULT (datetime('now')),
-                updated_at TEXT DEFAULT (datetime('now')),
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-                FOREIGN KEY (account_id) REFERENCES business_accounts(id) ON DELETE CASCADE
+                created_at TIMESTAMP DEFAULT NOW(),
+                updated_at TIMESTAMP DEFAULT NOW()
             )
-        `);
+        `).catch(err => console.error('Transactions table error:', err));
 
-        console.log('✅ SQLite database connected and ready');
+        console.log('✅ PostgreSQL database connected and ready');
     }
-    return db;
+    return pool;
 }
 
 module.exports = getDb;

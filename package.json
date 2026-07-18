@@ -4,8 +4,7 @@
   "description": "M-PESA payment solution for shop owners",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "npm rebuild sqlite3"
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -17,12 +16,9 @@
     "dotenv": "^16.0.0",
     "express": "^4.18.0",
     "jsonwebtoken": "^9.0.0",
-    "sqlite": "^5.0.0",
-    "sqlite3": "^6.0.0"
+    "pg": "^8.11.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.0"
-  },
-  "author": "Francis Were",
-  "license": "MIT"
+  }
 }
