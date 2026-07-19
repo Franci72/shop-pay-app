@@ -2,7 +2,7 @@
 //  HELPER FUNCTIONS
 // =============================================
 
-const API_BASE = 'https://shop-pay-app-nwgc.onrender.com/api';
+const API_BASE = 'https://shop-pay-web.onrender.com/api';
 
 function getToken() {
     return localStorage.getItem('token');
