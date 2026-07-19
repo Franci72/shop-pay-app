@@ -37,7 +37,8 @@ function hideMessage(element) {
 }
 
 function authHeaders() {
-    return { 'Authorization': 'Bearer ' + getToken() };
+    const token = getToken();
+    return { 'Authorization': 'Bearer ' + token };
 }
 
 async function apiRequest(url, options = {}) {
@@ -245,7 +246,7 @@ async function deleteAccount(id) {
 window.deleteAccount = deleteAccount;
 
 // =============================================
-//  PAYMENTS
+//  PAYMENTS - FIXED VERSION
 // =============================================
 
 document.getElementById('payment-form').addEventListener('submit', async (e) => {
@@ -257,21 +258,27 @@ document.getElementById('payment-form').addEventListener('submit', async (e) => 
     hideMessage(resultDiv);
 
     try {
+        // 1. Get accounts
         const accounts = await apiRequest('/accounts', {
             method: 'GET',
             headers: authHeaders()
         });
+
         if (accounts.accounts.length === 0) {
             showMessage(resultDiv, '❌ Please add an M-PESA account first.', 'error');
             return;
         }
+
+        // 2. Use the FIRST account's ID
         const account_id = accounts.accounts[0].id;
 
+        // 3. Send payment request
         const data = await apiRequest('/payment/send', {
             method: 'POST',
             headers: authHeaders(),
             body: JSON.stringify({ account_id, phone_number, amount, account_reference })
         });
+
         showMessage(resultDiv, `✅ Payment request sent! Transaction ID: ${data.transaction_id}`, 'success');
         loadTransactions();
     } catch (err) {
@@ -287,7 +294,6 @@ async function loadTransactions() {
     const listDiv = document.getElementById('transaction-list');
     listDiv.innerHTML = '<p>Loading...</p>';
     try {
-        // For now, show a placeholder
         listDiv.innerHTML = `
             <p>Transaction history will appear here after you send payments.</p>
             <p><em>Check your server console for callbacks.</em></p>
