@@ -40,7 +40,7 @@
                         <input type="text" id="reg-business" placeholder="Business Name" required>
                         <input type="email" id="reg-email" placeholder="Email" required>
                         <input type="password" id="reg-password" placeholder="Password" required>
-                        <input type="text" id="reg-phone" placeholder="Phone Number" required>
+                        <input type="tel" id="reg-phone" placeholder="Phone Number" inputmode="numeric" pattern="[0-9]*" required>
                         <button type="submit">Register</button>
                         <p class="switch-link">Already have an account? <a href="#" id="show-login">Login</a></p>
                     </form>
@@ -73,10 +73,25 @@
                     <h3>Send STK Push Request</h3>
                     <form id="payment-form">
                         <label>Customer Phone (e.g., 0712345678)</label>
-                        <input type="text" id="pay-phone" placeholder="0712345678" required>
+                        <input
+                            type="tel"
+                            id="pay-phone"
+                            placeholder="0712345678"
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                            required
+                        >
 
                         <label>Amount (KES)</label>
-                        <input type="text" id="pay-amount" placeholder="100" required>
+                        <input
+                            type="number"
+                            id="pay-amount"
+                            placeholder="100"
+                            inputmode="numeric"
+                            min="1"
+                            step="1"
+                            required
+                        >
 
                         <label>Account Reference (Optional)</label>
                         <input type="text" id="pay-ref" placeholder="INV-001">
