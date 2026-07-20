@@ -38,7 +38,11 @@ p { color: #666; margin-bottom: 20px; }
     justify-content: space-between;
     align-items: center;
 }
-.header h1 { margin-bottom: 0; display: flex; align-items: center; }
+.header h1 { 
+    margin-bottom: 0; 
+    display: flex; 
+    align-items: center;
+}
 
 /* =============================================
    M-PESA LOGO STYLES
@@ -48,6 +52,7 @@ p { color: #666; margin-bottom: 20px; }
     width: auto;
     vertical-align: middle;
     margin-right: 10px;
+    object-fit: contain;
 }
 
 @media (max-width: 500px) {
