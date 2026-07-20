@@ -41,16 +41,16 @@ p { color: #666; margin-bottom: 20px; }
 .header h1 { margin-bottom: 0; }
 
 /* =============================================
-   INPUT STYLES - UPDATED FOR MOBILE
+   INPUT STYLES - CLEAN AND SIMPLE
    ============================================= */
 input, select {
     width: 100%;
-    padding: 14px 12px;
+    padding: 12px;
     margin: 8px 0 15px 0;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-size: 16px; /* Prevents iOS zoom on focus */
-    background: #fafafa;
+    font-size: 14px;
+    background: white;
     transition: border-color 0.3s ease;
 }
 
@@ -61,7 +61,7 @@ input:focus, select:focus {
 }
 
 /* =============================================
-   NUMBER INPUT - REMOVE SPIN BUTTONS
+   REMOVE SPIN BUTTONS FROM NUMBER INPUTS
    ============================================= */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -75,26 +75,11 @@ input[type="number"] {
 }
 
 /* =============================================
-   TEL & NUMBER INPUTS - FORCE NUMERIC KEYPAD
-   ============================================= */
-input[type="tel"],
-input[type="number"] {
-    font-size: 18px; /* Larger for easier tapping */
-    letter-spacing: 1px;
-}
-
-input[type="tel"]::placeholder,
-input[type="number"]::placeholder {
-    font-size: 14px;
-    letter-spacing: 0;
-}
-
-/* =============================================
    BUTTONS
    ============================================= */
 button {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     background: #4CAF50;
     color: white;
     border: none;
@@ -103,7 +88,6 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s ease;
-    margin-top: 5px;
 }
 
 button:hover { background: #45a049; }
@@ -198,67 +182,13 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 #user-name { font-weight: bold; color: #333; margin-right: 15px; }
 
 /* =============================================
-   RESPONSIVE / MOBILE
+   RESPONSIVE
    ============================================= */
 @media (max-width: 500px) {
     .card { padding: 20px; }
-
-    .header {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .tabs {
-        flex-wrap: wrap;
-    }
-
-    .tab-btn {
-        flex: 1 1 30%;
-        font-size: 12px;
-        padding: 8px 4px;
-    }
-
-    /* Larger touch targets on mobile */
-    input, select, button {
-        font-size: 16px;
-        padding: 14px 12px;
-    }
-
-    input[type="tel"],
-    input[type="number"] {
-        font-size: 20px;
-        padding: 16px 12px;
-    }
-
-    .logout-btn {
-        padding: 6px 14px;
-        font-size: 13px;
-    }
-}
-
-/* =============================================
-   DARK MODE SUPPORT (Optional)
-   ============================================= */
-@media (prefers-color-scheme: dark) {
-    body { background: #1a1a2e; }
-    .card { background: #16213e; }
-    h1, h2, h3, h4 { color: #e0e0e0; }
-    p { color: #aaa; }
-    input, select {
-        background: #1a1a2e;
-        border-color: #333;
-        color: #e0e0e0;
-    }
-    input:focus, select:focus {
-        border-color: #4CAF50;
-        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
-    }
-    .account-item, .transaction-item { background: #1a1a2e; border-color: #333; color: #e0e0e0; }
-    .tabs .tab-btn { background: #1a1a2e; color: #aaa; }
-    .tabs .tab-btn.active { background: #4CAF50; color: white; }
-    .tab-btn:hover:not(.active) { background: #2a2a4e; }
-    hr { border-color: #333; }
-    .message.success { background: #1a3a1a; color: #8bc34a; border-color: #2a5a2a; }
-    .message.error { background: #3a1a1a; color: #ef5350; border-color: #5a2a2a; }
-    .message.info { background: #1a2a3a; color: #4fc3f7; border-color: #2a4a5a; }
+    .header { flex-direction: column; gap: 10px; }
+    .tabs { flex-wrap: wrap; }
+    .tab-btn { flex: 1 1 30%; font-size: 12px; padding: 8px 4px; }
+    input, select, button { font-size: 16px; padding: 12px; }
+    .logout-btn { padding: 6px 14px; font-size: 13px; }
 }
