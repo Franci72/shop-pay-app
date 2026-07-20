@@ -40,18 +40,61 @@ p { color: #666; margin-bottom: 20px; }
 }
 .header h1 { margin-bottom: 0; }
 
+/* =============================================
+   INPUT STYLES - UPDATED FOR MOBILE
+   ============================================= */
 input, select {
     width: 100%;
-    padding: 12px;
+    padding: 14px 12px;
     margin: 8px 0 15px 0;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+    background: #fafafa;
+    transition: border-color 0.3s ease;
 }
 
+input:focus, select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+/* =============================================
+   NUMBER INPUT - REMOVE SPIN BUTTONS
+   ============================================= */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* =============================================
+   TEL & NUMBER INPUTS - FORCE NUMERIC KEYPAD
+   ============================================= */
+input[type="tel"],
+input[type="number"] {
+    font-size: 18px; /* Larger for easier tapping */
+    letter-spacing: 1px;
+}
+
+input[type="tel"]::placeholder,
+input[type="number"]::placeholder {
+    font-size: 14px;
+    letter-spacing: 0;
+}
+
+/* =============================================
+   BUTTONS
+   ============================================= */
 button {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     background: #4CAF50;
     color: white;
     border: none;
@@ -59,8 +102,10 @@ button {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.3s ease;
+    margin-top: 5px;
 }
+
 button:hover { background: #45a049; }
 button:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -76,12 +121,16 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .switch-link a { color: #4CAF50; cursor: pointer; text-decoration: none; }
 .switch-link a:hover { text-decoration: underline; }
 
+/* =============================================
+   TABS
+   ============================================= */
 .tabs {
     display: flex;
     gap: 5px;
     margin: 20px 0;
     border-bottom: 2px solid #eee;
 }
+
 .tab-btn {
     flex: 1;
     padding: 10px;
@@ -93,6 +142,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     cursor: pointer;
     transition: 0.3s;
 }
+
 .tab-btn.active {
     background: #4CAF50;
     color: white;
@@ -102,6 +152,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
+/* =============================================
+   MESSAGES
+   ============================================= */
 .message {
     margin-top: 15px;
     padding: 12px;
@@ -112,9 +165,13 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .message.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 .message.info { display: block; background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
 
+/* =============================================
+   ACCOUNT & TRANSACTION LISTS
+   ============================================= */
 #account-list, #transaction-list {
     margin-top: 10px;
 }
+
 .account-item, .transaction-item {
     background: #f8f9fa;
     padding: 12px;
@@ -125,9 +182,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     justify-content: space-between;
     align-items: center;
 }
+
 .transaction-item.failed { border-left-color: #dc3545; }
 .transaction-item.pending { border-left-color: #ffc107; }
 .transaction-item .small { font-size: 12px; color: #888; }
+
 .delete-btn {
     background: #dc3545;
     padding: 4px 12px;
@@ -138,9 +197,68 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 #user-name { font-weight: bold; color: #333; margin-right: 15px; }
 
+/* =============================================
+   RESPONSIVE / MOBILE
+   ============================================= */
 @media (max-width: 500px) {
     .card { padding: 20px; }
-    .header { flex-direction: column; gap: 10px; }
-    .tabs { flex-wrap: wrap; }
-    .tab-btn { flex: 1 1 30%; }
+
+    .header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        flex: 1 1 30%;
+        font-size: 12px;
+        padding: 8px 4px;
+    }
+
+    /* Larger touch targets on mobile */
+    input, select, button {
+        font-size: 16px;
+        padding: 14px 12px;
+    }
+
+    input[type="tel"],
+    input[type="number"] {
+        font-size: 20px;
+        padding: 16px 12px;
+    }
+
+    .logout-btn {
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+}
+
+/* =============================================
+   DARK MODE SUPPORT (Optional)
+   ============================================= */
+@media (prefers-color-scheme: dark) {
+    body { background: #1a1a2e; }
+    .card { background: #16213e; }
+    h1, h2, h3, h4 { color: #e0e0e0; }
+    p { color: #aaa; }
+    input, select {
+        background: #1a1a2e;
+        border-color: #333;
+        color: #e0e0e0;
+    }
+    input:focus, select:focus {
+        border-color: #4CAF50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    }
+    .account-item, .transaction-item { background: #1a1a2e; border-color: #333; color: #e0e0e0; }
+    .tabs .tab-btn { background: #1a1a2e; color: #aaa; }
+    .tabs .tab-btn.active { background: #4CAF50; color: white; }
+    .tab-btn:hover:not(.active) { background: #2a2a4e; }
+    hr { border-color: #333; }
+    .message.success { background: #1a3a1a; color: #8bc34a; border-color: #2a5a2a; }
+    .message.error { background: #3a1a1a; color: #ef5350; border-color: #5a2a2a; }
+    .message.info { background: #1a2a3a; color: #4fc3f7; border-color: #2a4a5a; }
 }
