@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shop Pay</title>
 
-    <!-- PWA Manifest -->
+    <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#4CAF50">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <!-- Styles -->
+    <!-- CSS -->
     <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Favicon / Icons -->
+    <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="/icon-192.png">
 </head>
 <body>
     <div id="app">
@@ -70,10 +74,13 @@
                     <form id="payment-form">
                         <label>Customer Phone (e.g., 0712345678)</label>
                         <input type="text" id="pay-phone" placeholder="0712345678" required>
+
                         <label>Amount (KES)</label>
-                        <input type="number" id="pay-amount" placeholder="100" required>
+                        <input type="text" id="pay-amount" placeholder="100" required>
+
                         <label>Account Reference (Optional)</label>
                         <input type="text" id="pay-ref" placeholder="INV-001">
+
                         <button type="submit">Send Payment Request</button>
                     </form>
                     <div id="payment-result" class="message"></div>
